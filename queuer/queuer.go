@@ -81,7 +81,8 @@ func pushHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	cs := os.Getenv("REDIS_ADDR")
-	qn := os.Getenv("REDIS_QUEUE")
+	qa := os.Getenv("QUEUE_ADDR")
+	qn := os.Getenv("QUEUE_NAME")
 	pool, err := pool.New("tcp", cs, 10)
 	if err != nil {
 		fmt.Println("Failed to create redis connection pool!")
@@ -96,5 +97,5 @@ func main() {
 
 	http.HandleFunc("/pop", popHandler)
 	http.HandleFunc("/push", pushHandler)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(qa, nil)
 }

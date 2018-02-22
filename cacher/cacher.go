@@ -84,7 +84,8 @@ func setHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	cs := os.Getenv("REDIS_CACHE")
+	cs := os.Getenv("REDIS_ADDR")
+	ca := os.Getenv("CACHE_ADDR")
 	pool, err := pool.New("tcp", cs, 10)
 	if err != nil {
 		fmt.Println("Failed to create redis connection pool!")
@@ -96,5 +97,5 @@ func main() {
 
 	http.HandleFunc("/get", getHandler)
 	http.HandleFunc("/set", setHandler)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(ca, nil)
 }
