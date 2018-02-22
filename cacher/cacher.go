@@ -61,7 +61,7 @@ func setHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error reading request body", 400)
 	}
 
-	err = json.Unmarshal([]byte(body), &kv)
+	err = json.Unmarshal(body, &kv)
 	if err != nil {
 		http.Error(w, "Error unmarshaling json payload", 400)
 	}
