@@ -25,6 +25,7 @@ type Cache struct {
 // I'm limiting this to simple key-values.
 func (c *Cache) Get(k string) (string, error) {
 	resp, err := c.pool.Cmd("GET", k).Str()
+	// Generally speaking, the right thing to do is always to propagate any error you recieve.
 	return resp, err
 }
 
@@ -114,8 +115,10 @@ func main() {
 	pool, err := pool.New("tcp", cs, 10)
 	if err != nil {
 		fmt.Println("Failed to create redis connection pool!")
+		// normally this would either be logged or output to stderr. For simplicity I am just printing it, but generally you shouldn't do this.
+		// See https://golang.org/pkg/log/#Fatalln, https://golang.org/pkg/os/#Exit, and consider using fmt.Fprintf() with os.Stderr
 		fmt.Println(err)
-		return
+		os.Exit(1)
 	}
 
 	// pool.Empty() closes all connections in the pool and does other cleanup actions. defer tells go to execute this line after

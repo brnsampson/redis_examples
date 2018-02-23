@@ -77,8 +77,10 @@ func main() {
 		// buffer until we hit a carrage return, then read the buffer in as a string
 		s, err := reader.ReadString('\n')
 		if err != nil {
+			// normally this would either be logged or output to stderr. For simplicity I am just printing it, but generally you shouldn't do this.
+			// See https://golang.org/pkg/log/#Fatalln, https://golang.org/pkg/os/#Exit, and consider using fmt.Fprintf() with os.Stderr
 			fmt.Println("Error encountered when reading line from stdin")
-			return
+			os.Exit(1)
 		}
 		// Strip off line break and attach the username to the message.
 		line := s[:len(s)-1]

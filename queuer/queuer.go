@@ -27,6 +27,7 @@ type Queue struct {
 // executing a blocking pop (BLPOP) in a goroutine instead.
 func (q *Queue) Pop() (string, error) {
 	resp, err := q.pool.Cmd("LPOP", q.name).Str()
+	// always propagate your errors
 	return resp, err
 }
 
@@ -103,8 +104,10 @@ func main() {
 	pool, err := pool.New("tcp", cs, 10)
 	if err != nil {
 		fmt.Println("Failed to create redis connection pool!")
+		// normally this would either be logged or output to stderr. For simplicity I am just printing it, but generally you shouldn't do this.
+		// See https://golang.org/pkg/log/#Fatalln, https://golang.org/pkg/os/#Exit, and consider using fmt.Fprintf() with os.Stderr
 		fmt.Println(err)
-		return
+		os.Exit(1)
 	}
 	defer pool.Empty()
 
